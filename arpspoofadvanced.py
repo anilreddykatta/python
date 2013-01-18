@@ -19,15 +19,16 @@ def findBCastAddress():
         return bcast_ip_address
 
 def findDefaultGateWay():
-    output = subprocess.Popen('route', stdout=subprocess.PIPE).communicate()[0]
-    pattern = re.compile('default\s+')
-    mat_object = pattern.search(output)
-    index = output.index(mat_object.group(0))
-    length = len(mat_object.group(0))
-    default_gateway = output[index+length:index+length+IPV4_LENGTH]
-    default_gateway = default_gateway.strip()
-    print('Default gateway is: '+default_gateway)
-    return default_gateway
+    if platform.startswith('linux'):
+        output = subprocess.Popen('route', stdout=subprocess.PIPE).communicate()[0]
+        pattern = re.compile('default\s+')
+        mat_object = pattern.search(output)
+        index = output.index(mat_object.group(0))
+        length = len(mat_object.group(0))
+        default_gateway = output[index+length:index+length+IPV4_LENGTH]
+        default_gateway = default_gateway.strip()
+        print('Default gateway is: '+default_gateway)
+        return default_gateway
 
 def spoof():
     findBCastAddress()
