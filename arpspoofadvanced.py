@@ -31,8 +31,8 @@ def findDefaultGateWay():
         return default_gateway
 
 def spoof():
-    findBCastAddress()
-    findDefaultGateWay()
+    #findBCastAddress()
+    #findDefaultGateWay()
     dst_ip = raw_input('Enter the machine IP you want to spoof: ')
     src_ip = raw_input('Enter the default gateway IP: ')
     src_hw = raw_input('Enter the source MAC address: ')
