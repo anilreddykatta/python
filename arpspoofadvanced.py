@@ -7,6 +7,7 @@ import subprocess
 import re
 
 IPV4_LENGTH = 13
+HW_LENGTH = 17
 bcast_string = 'Bcast:'
 #default_gateway =
 def getBCastAddress():
@@ -18,7 +19,7 @@ def getBCastAddress():
         bcast_ip_address = bcast_ip_address.strip()
         return bcast_ip_address
 
-def getDefaultGateWay():
+def getDefaultGateway():
     if platform.startswith('linux'):
         output = subprocess.Popen('route', stdout=subprocess.PIPE).communicate()[0]
         pattern = re.compile('default\s+')
